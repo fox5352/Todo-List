@@ -7,7 +7,14 @@ const mongoose = require('mongoose');
 const app = express();
 app.set("view engine", 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
 
+app.route('/')
+    .get(async function (req, res) {
+        res.render('todoList');
+    });
 
-app.listen(process.env.PORT, () => { console.log(`server started on port ${process.env.PORT}`); });
+app.listen(process.env.PORT, () => {
+    console.log(`server started on port ${process.env.PORT}`);
+});
