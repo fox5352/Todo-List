@@ -49,6 +49,11 @@ header {
     margin-right: 25px;
 }
 
+.nav-controls>a {
+    color: var(--fg-one);
+    text-decoration: none;
+}
+
 .nav-btn {
     display: flex;
     justify-content: center;

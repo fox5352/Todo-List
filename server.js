@@ -3,12 +3,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
+// DB Connection
 
+// Express config
 const app = express();
 app.set("view engine", 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
+// Global vars
 
 app.route('/')
     .get(async function (req, res) {
