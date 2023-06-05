@@ -1,4 +1,4 @@
-require("dotenv").config();
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -7,15 +7,29 @@ const mongoose = require('mongoose');
 
 // Express config
 const app = express();
-app.set("view engine", 'ejs');
+app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 // Global vars
+let data = { navBtn: false };
 
 app.route('/')
     .get(async function (req, res) {
-        res.render('todoList');
+        data.navBtn = false;
+        res.render('todoList', { data: data });
+    });
+
+app.route('/about')
+    .get(async function (req, res) {
+        data.navBtn = true;
+        res.render('todoList', { data: data });
+    });
+
+app.route("/:title")
+    .get(async function (req, res) {
+        data.navBtn = false;
+        res.render('todoList', { data: data });
     });
 
 app.listen(process.env.PORT, () => {

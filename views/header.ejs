@@ -16,7 +16,23 @@
             <h1 class="title">TODO LIST</h1>
         </div>
         <div class="nav-controls">
-            <a href="/about"><button class="nav-btn">About</button></a>
-            <a href="/" target="_blank"><button class="nav-btn">gitHub</button></a>
+
+            <% if (data.navBtn) { %>
+                <a href="/">
+                    <button class="nav-btn">
+                        Home
+                    </button>
+                </a <% } else { %>
+                <a href="/about">
+                    <button class="nav-btn">
+                        About
+                    </button>
+                </a>
+
+                <% } %>
+
+
+                    <a href="/" target="_blank"><button class="nav-btn">gitHub</button></a>
+                    <a href="#"><button class="nav-btn">login</button></a>
         </div>
     </header>
