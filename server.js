@@ -4,6 +4,23 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 // DB Connection
+mongoose.connect(`${process.env.DB_URL}TodoListDB`);
+
+const todoSchema = mongoose.Schema({
+    userName: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    list: {
+        type: Array
+    }
+});
+
+const User = mongoose.model('users', todoSchema);
 
 // Express config
 const app = express();
