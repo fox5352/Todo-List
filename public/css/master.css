@@ -1,6 +1,5 @@
 :root {
     --fg-one: #fff0f0;
-
     --header-bg-color-one: #E52D27;
     --header-bg-color-two: #B31217;
     --bg-color: #f9d5d3;
@@ -25,9 +24,9 @@ header {
 
     height: 50px;
 
+    border: 0;
     border-radius: 0 0 8px 8px;
     background-image: linear-gradient(90deg, var(--header-bg-color-one), var(--header-bg-color-two));
-    border: 1px solid black;
 }
 
 .heading {
@@ -73,6 +72,56 @@ header {
 
 /* ABOUT PAGE */
 .about-body {
+    display: flex;
+    justify-content: center;
+
     width: 100%;
-    height: 90vh;
+}
+
+.about-content {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+}
+
+.heading-2 {
+    padding: 0px 5px 0px;
+    margin: 0;
+
+    text-align: left;
+    line-height: 3;
+    letter-spacing: 3px;
+    color: var(--header-bg-color-one);
+}
+
+.heading-2:nth-last-of-type(even) {
+    text-align: right;
+    color: var(--header-bg-color-two);
+}
+
+.text {
+    margin: 0;
+    padding: 8px 8px;
+
+    font-size: 18px;
+    font-family: serif;
+    list-style: none;
+
+    border: 0;
+    border-radius: 8px;
+    box-shadow: -3px -3px var(--header-bg-color-one), 3px 3px var(--header-bg-color-two), 3px -3px var(--header-bg-color-one), -3px 3px var(--header-bg-color-two);
+    /* background-color: var(--bg-color); */
+}
+
+.text>strong {
+    color: var(--header-bg-color-one);
+}
+
+.text a {
+    color: var(--header-bg-color-one);
+    text-decoration: none;
+}
+
+.text a:hover {
+    color: var(--header-bg-color-two);
 }

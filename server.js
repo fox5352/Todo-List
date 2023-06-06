@@ -64,7 +64,7 @@ app.route("/login")
 // CUSTOM ROUTE
 app.route("/:title")
     .get(async function (req, res) {
-        res.end('404');
+        res.redirect('/');
     });
 
 app.listen(process.env.PORT, () => {
