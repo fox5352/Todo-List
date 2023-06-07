@@ -1,7 +1,18 @@
 <%- include('header') %>
     <main class="login-body">
         <form action="POST" class="form-block">
+            <h2 class="form-heading">Login</h2>
+            <div class="form-control">
+                <input type="text" class="form-input" required autocomplete="off" autocapitalize="off">
+                <label class="form-label">UserName</label>
+            </div>
 
+            <div class="form-control">
+                <input type="text" class="form-input" required autocomplete="off" autocapitalize="off">
+                <label class="form-label">Password</label>
+            </div>
+
+            <button class="form-btn">Enter</button>
         </form>
     </main>
     <%- include('footer') %>
