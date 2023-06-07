@@ -55,7 +55,7 @@ app.route('/about')
 // LOGIN PAGE
 app.route("/login")
     .get(async function (req, res) {
-        res.end();
+        res.render('login', { data: data });
     })
     .post(async function (req, res) {
         res.end();

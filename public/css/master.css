@@ -110,7 +110,7 @@ header {
     border: 0;
     border-radius: 8px;
     box-shadow: -3px -3px var(--header-bg-color-one), 3px 3px var(--header-bg-color-two), 3px -3px var(--header-bg-color-one), -3px 3px var(--header-bg-color-two);
-    /* background-color: var(--bg-color); */
+    background-color: var(--bg-color);
 }
 
 .text>strong {
@@ -124,4 +124,54 @@ header {
 
 .text a:hover {
     color: var(--header-bg-color-two);
+}
+
+
+/* LOGIN and REGISTER PAGEs  */
+.login-body {
+    display: flex;
+
+    width: 100%;
+    height: 80vh;
+}
+
+
+@media screen and (max-width: 512px) {
+    /* header {
+        justify-content: center;
+    }
+
+    header .heading {
+        display: none;
+    } */
+
+    .nav-btn {
+        margin: 0px 2px;
+
+        width: 41px;
+    }
+
+    .nav-btn:hover {
+        background-color: #8f0e12;
+    }
+}
+
+@media screen and (max-width:350px) {
+    header {
+        justify-content: center;
+    }
+
+    header .heading {
+        display: none;
+    }
+
+    .nav-btn {
+        margin: 0px 2px;
+
+        width: 61px;
+    }
+
+    .nav-btn:hover {
+        background-color: #8f0e12;
+    }
 }
