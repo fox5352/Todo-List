@@ -54,12 +54,20 @@ app.route('/')
     })
     .post(async function (req, res) {
         const newData = req.body.newNote;
-        User.updateOne({ userName: userAccount.userName }, { $addToSet: { list: newData } })
-            .then(response => {
-                res.redirect("/");
-            });
+        const response = await User.updateOne({ userName: userAccount.userName }, { $push: { list: newData } });
+
+        res.redirect("/");
 
     });
+
+app.post('/remove', async function (req, res) {
+    const response = await User.findOne({ userName: userAccount.userName });
+    const delItem = response.list[req.body.index];
+
+    const data = await User.updateOne({ userName: userAccount.userName }, { $pull: { list: delItem } });
+
+    res.redirect('/');
+});
 
 // ABOUT PAGE    
 app.route('/about')
@@ -75,7 +83,6 @@ app.route("/login")
     })
     .post(async function (req, res) {
         const formData = req.body;
-        // const resData = await User.find({ userName: formData.userName });
     });
 
 app.listen(process.env.PORT, () => {
