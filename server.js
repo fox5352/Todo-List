@@ -22,8 +22,6 @@ const todoSchema = mongoose.Schema({
 
 const User = mongoose.model('users', todoSchema);
 
-
-
 // Express config
 const app = express();
 app.set('view engine', 'ejs');
@@ -31,18 +29,32 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 // Global vars
-let data = { navBtn: false };// this var is used to dynamically change the one nav btn depending on what page your on
+let data = { navBtn: false, notes: [] };// this var is used to dynamically change the one nav btn depending on what page your on
+let userAccount = { userName: "default", password: "YMCA" };
+let counter = 0;
 
 
 // HOME PAGE
 app.route('/')
     .get(async function (req, res) {
+        const response = await User.findOne({ userName: userAccount.userName });
+
         data.navBtn = false;
-        if (data.loggedIn) {
-            res.render('todoList', { data: data });
-        } else {
-            res.redirect('/about');
-        }
+        data.notes = response.list;
+
+        res.render('todoList', { data: data });
+
+        // if (counter > 0) {
+        //     res.render('todoList', { data: data });
+        // } else {
+        //     counter++;
+        //     res.redirect('/about');
+        // }
+    })
+    .post(async function (req, res) {
+        const newData = req.body.newNote;
+        User.updateOne({ userName: userAccount.userName }, { $addToSet: { list: newData } })
+            .then(response => console.log(response));
     });
 
 // ABOUT PAGE    
@@ -52,19 +64,14 @@ app.route('/about')
         res.render('about', { data: data });
     });
 
-// LOGIN PAGE
+// // LOGIN PAGE
 app.route("/login")
     .get(async function (req, res) {
         res.render('login', { data: data });
     })
     .post(async function (req, res) {
-        res.end();
-    });
-
-// CUSTOM ROUTE
-app.route("/:title")
-    .get(async function (req, res) {
-        res.redirect('/');
+        const formData = req.body;
+        // const resData = await User.find({ userName: formData.userName });
     });
 
 app.listen(process.env.PORT, () => {

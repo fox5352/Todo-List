@@ -1,17 +1,18 @@
 <%- include('header') %>
     <main class="login-body">
-        <form action="POST" class="form-block">
+        <form action="/login" method="POST" class="form-block">
             <h2 class="form-heading">Login</h2>
             <div class="form-control">
-                <input type="text" class="form-input" required autocomplete="off" autocapitalize="off">
+                <input type="text" class="form-input" name="userName" required autocomplete="off" autocapitalize="off">
                 <label class="form-label">UserName</label>
             </div>
 
             <div class="form-control">
-                <input type="text" class="form-input" required autocomplete="off" autocapitalize="off">
+                <input type="text" class="form-input" name="password" required autocomplete="off" autocapitalize="off">
                 <label class="form-label">Password</label>
             </div>
 
+            <a class="form-link" href="/register">don't have an account ?</a>
             <button class="form-btn">Enter</button>
         </form>
     </main>

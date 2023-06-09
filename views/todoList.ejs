@@ -1,3 +1,30 @@
 <%- include('header') %>
 
+    <div class="container">
+        <div class="note-pad">
+            <!-- <% for( let index=0; index < data.notes.length; index++ ) { %>
+                <%= data.notes[index] %> 
+                <% } %> -->
+
+            <div>
+                <% data.notes.forEach((note, index)=> { %>
+                    <form action="/remove" method="post" class="notes">
+                        <input type="checkbox" name="checkbox" id="" value=<%=index %>>
+                        <p>
+                            <%= note %>
+                        </p>
+                        <!-- <input type="hidden" name="noteIndex"> -->
+                    </form>
+                    <% }) %>
+            </div>
+
+            <form action="/" method="post">
+                <div class="note-pad-control">
+                    <input type="text" class="form-input" name="newNote">
+                    <button class="note-btn">+</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <%- include('footer') %>

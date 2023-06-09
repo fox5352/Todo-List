@@ -14,7 +14,7 @@ body {
     padding: 0;
 
     font-family: sans-serif;
-    background-color: var(--fg-one);
+    /* background-color: var(--fg-one); */
 }
 
 /* HEADER */
@@ -72,6 +72,59 @@ header {
     background-color: #8f0e12;
 }
 
+/* HOME TODO list page */
+
+.container {
+    display: flex;
+    justify-content: center;
+
+    width: 100%;
+}
+
+.note-pad {
+    padding: 5px;
+
+    margin: 70px 0px 0px;
+    width: 400px;
+
+    border: 0;
+    border-radius: 8px;
+    box-shadow: -3px -3px var(--header-bg-color-one), 3px 3px var(--header-bg-color-two), 3px -3px var(--header-bg-color-one), -3px 3px var(--header-bg-color-two);
+}
+
+.notes {
+    display: flex;
+}
+
+.notes * {
+    padding: 0;
+    margin: 0;
+}
+
+.note-pad-control {
+    display: flex;
+
+    padding: 0;
+}
+
+.note-btn {
+    flex-grow: 1;
+
+    border-radius: 0;
+    border: 2px solid var(--header-bg-color-one);
+}
+
+.note-pad-control>.form-input {
+    flex-basis: 85%;
+    margin: 0;
+
+    border: 0;
+    border-radius: 0;
+    border-top: 2px solid var(--header-bg-color-one);
+    border-left: 2px solid var(--header-bg-color-one);
+    border-bottom: 2px solid var(--header-bg-color-one);
+}
+
 /* ABOUT PAGE */
 .about-body {
     display: flex;
@@ -112,7 +165,7 @@ header {
     border: 0;
     border-radius: 8px;
     box-shadow: -3px -3px var(--header-bg-color-one), 3px 3px var(--header-bg-color-two), 3px -3px var(--header-bg-color-one), -3px 3px var(--header-bg-color-two);
-    background-color: var(--bg-color);
+    background-color: var(--fg-one);
 }
 
 .text>strong {
@@ -200,10 +253,21 @@ header {
     font-weight: bold;
 }
 
+.form-link {
+    text-decoration: none;
+    text-align: center;
+    margin-bottom: 10px;
+    color: var(--header-bg-color-one);
+}
+
+.form-link:hover {
+    color: var(--header-bg-color-two);
+}
+
 .form-btn {
     margin: 0 auto;
 
-    width: 55%;
+    width: 45%;
     height: 37px;
 
     font-size: 17px;
