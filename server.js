@@ -42,6 +42,7 @@ app.route('/')
         data.navBtn = false;
         data.notes = response.list;
 
+
         res.render('todoList', { data: data });
 
         // if (counter > 0) {
@@ -54,7 +55,10 @@ app.route('/')
     .post(async function (req, res) {
         const newData = req.body.newNote;
         User.updateOne({ userName: userAccount.userName }, { $addToSet: { list: newData } })
-            .then(response => console.log(response));
+            .then(response => {
+                res.redirect("/");
+            });
+
     });
 
 // ABOUT PAGE    

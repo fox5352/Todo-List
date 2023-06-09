@@ -82,7 +82,7 @@ header {
 }
 
 .note-pad {
-    padding: 5px;
+    padding: 8px 8px 5px;
 
     margin: 70px 0px 0px;
     width: 400px;
@@ -90,10 +90,27 @@ header {
     border: 0;
     border-radius: 8px;
     box-shadow: -3px -3px var(--header-bg-color-one), 3px 3px var(--header-bg-color-two), 3px -3px var(--header-bg-color-one), -3px 3px var(--header-bg-color-two);
+    background-color: var(--bg-color);
 }
 
 .notes {
     display: flex;
+    padding: 5px;
+    margin: 2px 0px;
+    min-height: 25px;
+
+    border: 0;
+    box-shadow: -3px -3px var(--header-bg-color-one), 3px 3px var(--header-bg-color-two), 3px -3px var(--header-bg-color-one), -3px 3px var(--header-bg-color-two);
+    background-color: var(--fg-one);
+}
+
+.notes:nth-child(1) {
+    border-radius: 8px 8px 0px 0px;
+}
+
+.notes:nth-last-child(1) {
+    border-radius: 0px 0px 8px 8px;
+    margin-bottom: 15px;
 }
 
 .notes * {
@@ -101,17 +118,23 @@ header {
     margin: 0;
 }
 
+.notes input {
+    display: flex;
+}
+
+.notes p {
+    display: flex;
+    align-items: center;
+    /* TODO: add some padding */
+    padding: 1px 3px;
+
+}
+
 .note-pad-control {
     display: flex;
 
     padding: 0;
-}
-
-.note-btn {
-    flex-grow: 1;
-
-    border-radius: 0;
-    border: 2px solid var(--header-bg-color-one);
+    /* TODO: style this border */
 }
 
 .note-pad-control>.form-input {
@@ -119,11 +142,31 @@ header {
     margin: 0;
 
     border: 0;
-    border-radius: 0;
+    border-radius: 8px 0px 0px 8px;
     border-top: 2px solid var(--header-bg-color-one);
     border-left: 2px solid var(--header-bg-color-one);
     border-bottom: 2px solid var(--header-bg-color-one);
 }
+
+.note-btn {
+    flex-grow: 1;
+
+    padding: 0;
+
+    font-size: 21px;
+    color: var(--header-bg-color-one);
+
+    border-radius: 0px 8px 8px 0px;
+    border: 2px solid var(--header-bg-color-one);
+    background-color: inherit;
+}
+
+.note-btn:hover {
+    cursor: pointer;
+    color: var(--fg-one);
+    background-color: var(--header-bg-color-one);
+}
+
 
 /* ABOUT PAGE */
 .about-body {

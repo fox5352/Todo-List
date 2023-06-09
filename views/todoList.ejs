@@ -9,7 +9,7 @@
             <div>
                 <% data.notes.forEach((note, index)=> { %>
                     <form action="/remove" method="post" class="notes">
-                        <input type="checkbox" name="checkbox" id="" value=<%=index %>>
+                        <input type="checkbox" name="checkbox" id="" value=<%=index %> onchange="this.form.submit()">
                         <p>
                             <%= note %>
                         </p>
