@@ -40,6 +40,10 @@ let data = { navBtn: false, notes: [] };// this var is used to dynamically chang
 let userAccount = { userName: "default", password: "1234" };
 let counter = 0;
 
+function changeUser(userName, password) {
+    userAccount = { userName: userName, password: password };
+}
+
 // HOME PAGE
 app.route('/')
     .get(async function (req, res) {
@@ -91,6 +95,8 @@ app.route("/login")
         const response = await User.findOne({ userName: req.body.userName });
 
         if (req.body.password === response.password) {
+            changeUser(req.body.userName, req.body.password);
+
             res.redirect('/');
         } else {
             res.redirect('/login');
@@ -113,8 +119,8 @@ app.route('/register')
 
             newUser.save()
                 .then(() => {
-                    userAccount.userName = data.userName;
-                    userAccount.password = data.password1;
+                    changeUser(data.userName, data.password1);
+
                     res.redirect('/');
                 });
 
