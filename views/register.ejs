@@ -1,0 +1,24 @@
+<%- include('header') %>
+    <main class="login-body">
+        <form action="/register" method="POST" class="form-block">
+            <h2 class="form-heading">Register</h2>
+            <div class="form-control">
+                <input type="text" class="form-input" name="userName" required autocomplete="off" autocapitalize="off">
+                <label class="form-label">UserName</label>
+            </div>
+
+            <div class="form-control">
+                <input type="text" class="form-input" name="password1" required autocomplete="off" autocapitalize="off">
+                <label class="form-label">Password</label>
+            </div>
+
+            <div class="form-control">
+                <input type="text" class="form-input" name="password2" required autocomplete="off" autocapitalize="off">
+                <label class="form-label">Password</label>
+            </div>
+
+            <a class="form-link" href="/login">have an account ?</a>
+            <button class="form-btn">Enter</button>
+        </form>
+    </main>
+    <%- include('footer') %>
