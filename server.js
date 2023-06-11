@@ -37,7 +37,7 @@ app.use(express.static('public'));
 
 // Global vars
 let data = { navBtn: false, notes: [] };// this var is used to dynamically change the one nav btn depending on what page your on
-let userAccount = { userName: "default", password: "YMCA" };
+let userAccount = { userName: "default", password: "1234" };
 let counter = 0;
 
 // HOME PAGE
@@ -82,13 +82,45 @@ app.route('/about')
         res.render('about', { data: data });
     });
 
-// // LOGIN PAGE
+// // LOGIN PAGE 
 app.route("/login")
     .get(async function (req, res) {
         res.render('login', { data: data });
     })
     .post(async function (req, res) {
-        const formData = req.body;
+        const response = await User.findOne({ userName: req.body.userName });
+
+        if (req.body.password === response.password) {
+            res.redirect('/');
+        } else {
+            res.redirect('/login');
+        }
+    });
+
+app.route('/register')
+    .get(async function (req, res) {
+        res.render('register', { data: data });
+    })
+    .post(async function (req, res) {
+        const data = req.body;
+        console.log(data.password1 === data.password2);
+
+        if (data.password1 === data.password2) {
+            const newUser = new User({
+                userName: data.userName,
+                password: data.password1
+            });
+
+            newUser.save()
+                .then(() => {
+                    userAccount.userName = data.userName;
+                    userAccount.password = data.password1;
+                    res.redirect('/');
+                });
+
+        } else {
+            res.redirect('/register');
+        }
     });
 
 app.listen(process.env.PORT, () => {
