@@ -3,9 +3,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-// DB Connection
-mongoose.connect(`${process.env.DB_URL}TodoListDB`);
 
+// DB Connection
+mongoose.connect(`${process.env.DB_URL}TodoListDB`, { useNewUrlParser: true });
+
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error"));
+db.once("open", () => console.log("TodoListDB connected"));
+
+// creates Schema
 const todoSchema = mongoose.Schema({
     userName: {
         type: String,
@@ -20,6 +26,7 @@ const todoSchema = mongoose.Schema({
     }
 });
 
+// creates model
 const User = mongoose.model('users', todoSchema);
 
 // Express config
@@ -32,7 +39,6 @@ app.use(express.static('public'));
 let data = { navBtn: false, notes: [] };// this var is used to dynamically change the one nav btn depending on what page your on
 let userAccount = { userName: "default", password: "YMCA" };
 let counter = 0;
-
 
 // HOME PAGE
 app.route('/')
