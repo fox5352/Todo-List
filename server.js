@@ -3,6 +3,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
+//TODO: istall mongoose-encryption
+
 
 // DB Connection
 mongoose.connect(`${process.env.DB_URL}TodoListDB`, { useNewUrlParser: true });
@@ -25,6 +27,8 @@ const todoSchema = mongoose.Schema({
         type: Array
     }
 });
+
+//todoSchema.plugin(encrypt, {secret: key, encryptedFields: ['list','password']})
 
 // creates model
 const User = mongoose.model('users', todoSchema);
