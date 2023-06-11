@@ -104,13 +104,13 @@ header {
     background-color: var(--fg-one);
 }
 
-.notes:nth-child(1) {
-    border-radius: 8px 8px 0px 0px;
-}
-
 .notes:nth-last-child(1) {
     border-radius: 0px 0px 8px 8px;
     margin-bottom: 15px;
+}
+
+.notes:first-child {
+    border-radius: 8px 8px 0px 0px;
 }
 
 .notes * {
