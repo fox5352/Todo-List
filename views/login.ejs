@@ -3,17 +3,17 @@
         <form action="/login" method="POST" class="form-block">
             <h2 class="form-heading">Login</h2>
             <div class="form-control">
-                <input type="text" class="form-input" name="userName" required autocomplete="off" autocapitalize="off">
+                <input type="text" class="form-input" name="userName" required>
                 <label class="form-label">UserName</label>
             </div>
 
             <div class="form-control">
-                <input type="text" class="form-input" name="password" required autocomplete="off" autocapitalize="off">
+                <input type="password" class="form-input" name="password" required>
                 <label class="form-label">Password</label>
             </div>
 
             <a class="form-link" href="/register">don't have an account ?</a>
-            <button class="form-btn">Enter</button>
+            <button class="form-btn" type="submit">Enter</button>
         </form>
     </main>
     <%- include('footer') %>
