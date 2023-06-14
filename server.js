@@ -4,33 +4,12 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-// TODO: pull data from index not string in the remove route.
+// Local imports
+const { getUserNotes, pushNewNote,
+    removeUserNote, loginUser,
+    createUser } = require('./model/user.model');
+
 // TODO: added validators later to the post / route.
-
-// DB Connection
-mongoose.connect(`${process.env.DB_URL}TodoListDB`, { useNewUrlParser: true });
-
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error"));
-db.once("open", () => console.log("TodoListDB connected"));
-
-// creates Schema
-const todoSchema = mongoose.Schema({
-    userName: {
-        type: String,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    list: {
-        type: Array
-    }
-});
-
-// creates model
-const User = mongoose.model('users', todoSchema);
 
 // Express config
 const app = express();
@@ -54,17 +33,11 @@ function changeUser(userName) {
 app.route('/')
     // Handles home page
     .get(async function (req, res) {
-        //gets users data
-        const response = await User.findOne({ userName: userAccount.userName });
+        //gets users notes
+        data.notes = await getUserNotes(userAccount.userName) || [];
 
         // sets the navBtn to false which loads the about page button
         data.navBtn = false;
-        try {
-            //sets the notes from the data base to the page
-            data.notes = response.list;
-        } catch (error) {
-            console.log(error);
-        }
 
         // if its the default user account first redirect to about page
         if (userAccount.userName === "default") {
@@ -83,22 +56,21 @@ app.route('/')
     })
     // sends data to the data base
     .post(async function (req, res) {
-        const newData = req.body.newNote;
-        const response = await User.updateOne({ userName: userAccount.userName }, { $push: { list: newData } });
+        // pushes new note to users list
+        const response = await pushNewNote(userAccount.userName, req.body.newNote);
 
         res.redirect("/");
-
     });
 
 // handles the removal of the notes from the todo-list
 app.post('/remove', async function (req, res) {
     // gets the users data
-    const response = await User.findOne({ userName: userAccount.userName });
+    const list = await getUserNotes(userAccount.userName);
     // this is just temporary till i can find a way to remove from index rather than the string its self
-    const delItem = response.list[req.body.index];
+    const delItem = list[req.body.index];
 
     // pull the data from the data base 
-    const data = await User.updateOne({ userName: userAccount.userName }, { $pull: { list: delItem } });
+    const response = await removeUserNote(userAccount.userName, delItem);
 
     // then reloads the page
     res.redirect('/');
@@ -127,30 +99,14 @@ app.route("/login")
     })
     //checks if the formData matches the data base then redirects
     .post(async function (req, res) {
-        // Gets the user data that matches
-        const response = await User.findOne({ userName: req.body.userName });
+        // validates data and return a bool
+        const response = await loginUser(req.body.userName, req.body.password);
 
-        // checks to see if username matches
         if (response) {
+            //then changes global user's name to new user
+            changeUser(req.body.userName);
 
-            // compares the users input to the databases data
-            bcrypt.compare(req.body.password, response.password, (err, bool) => {
-                if (!err) {
-                    // if passwords matches then changes username and redirects
-                    if (bool) {
-                        //then changes global user's name to new user
-                        changeUser(req.body.userName);
-
-                        res.redirect('/');
-                    } else {
-                        res.redirect('/login');
-                    }
-                } else {
-                    console.log(err);
-                    res.redirect('/login');
-                }
-            });
-
+            res.redirect('/');
         } else {
             res.redirect('/login');
         }
@@ -163,46 +119,21 @@ app.route('/register')
     })
     //validates then creates new users then redirects to home page
     .post(async function (req, res) {
-        // gets form data
-        const data = req.body;
 
-        //validates if the userName exists already 
-        const userValidator = await User.exists({ userName: data.userName });
+        // check if passwords match
+        if (req.body.password1 === req.body.password2) {
+            const response = await createUser(req.body.userName, req.body.password1, saltRounds);
 
-        // if userName doesn't exist
-        if (!userValidator) {
-            // check if passwords match
-            if (data.password1 === data.password2) {
-                // hashes the password before saving it
-                bcrypt.hash(data.password1, saltRounds, (err, hash) => {
-                    if (!err) {
-                        //create new user document 
-                        const newUser = new User({
-                            userName: data.userName,
-                            password: hash
-                        });
-
-                        //save then change global username to new user then redirect to home page
-                        newUser.save()
-                            .then(() => {
-                                changeUser(data.userName);
-
-                                res.redirect('/');
-                            });
-
-                    } else {
-                        console.log(err);
-                        res.redirect('/register');
-                    }
-                });
-
+            if (response) {
+                changeUser(req.body.userName);
+                res.redirect('/');
             } else {
-                res.redirect('/register');//passwords didn't match
+                res.redirect('/register');
             }
-        } else {
-            res.redirect('/register');//userName already exists
-        }
 
+        } else {
+            res.redirect('/register');
+        }
     });
 
 app.listen(process.env.PORT, () => {
