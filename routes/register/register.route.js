@@ -1,7 +1,8 @@
 const { join } = require('path');
 const { Router } = require('express');
 //local imports
-const { registerGetController, } = require(join(__dirname, 'registerRouter.controller.js'));
+const { registerGetController, registerPostController } = require(join(__dirname,'register.controller.js'));
+
 
 const registerRouter = Router();
 

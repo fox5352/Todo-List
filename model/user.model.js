@@ -1,9 +1,11 @@
 const bcrypt = require('bcrypt');
+const { reject } = require('bcrypt/promises');
+const { response } = require('express');
 const mongoose = require('mongoose');
 
 
 // DB Connection
-mongoose.connect(`${process.env.DB_URL}TodoListDB`, { useNewUrlParser: true });
+mongoose.connect(`${process.env.DB_URL}/TodoListDB`, { useNewUrlParser: true });
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));
@@ -11,6 +13,11 @@ db.once('open', () => console.log('TodoListDB connected'));
 
 // creates user schema
 const todoSchema = mongoose.Schema({
+    id: {
+        type: String,
+        unique: true,
+        default: new mongoose.Types.ObjectId()
+    },
     userName: {
         type: String,
         required: true
@@ -20,7 +27,8 @@ const todoSchema = mongoose.Schema({
         required: true
     },
     list: {
-        type: Array
+        type: Array,
+        default: []
     }
 });
 
@@ -28,14 +36,16 @@ const todoSchema = mongoose.Schema({
 const User = mongoose.model('users', todoSchema);
 
 // Gets all users notes and returns a list
-async function getUserNotes(username) {
-    try {
-        const response = await User.findOne({ userName: username });
-        return response.list;
-    } catch (error) {
-        console.log(error);
-        return;
-    }
+function getUserNotes(ID) {
+    return new Promise((resolve, reject)=>{
+        User.findOne({id: ID})
+            .then(response=>{
+                console.log(response);
+                resolve(response.list)
+            }).catch(err=>{
+                reject()
+            })
+    })
 }
 
 // Pushes new note to the users list 
@@ -61,49 +71,41 @@ async function removeUserNote(username, note) {
 }
 
 // check to see is username and password matches
-function loginUser(username, password) {
-    return new Promise((resolve, reject) => {
-        User.findOne({ userName: username })
-            .then(response => {
+async function loginUser(username, password) {
+    return new Promise((resolve, reject)=>{
+        User.findOne({userName: username})
+            .then(response=>{
                 bcrypt.compare(password, response.password, (err, bool) => {
-                    if (!err) {
-                        resolve(bool);
-                    } else {
-                        reject(err);
+                    if (bool){
+                        resolve(response.id)
+                    }else{
+                        reject(false)
                     }
-                });
-            });
-
-    });
-
-
+                })
+            }).catch(err=>{
+                reject(false)
+            })
+    })
 }
 
 // creates a new user
-async function createUser(username, password, salt) {
-    //validates if the userName exists already 
-    const exists = await User.exists({ userName: username });
-    if (!exists) {
-        return new Promise((resolve, reject) => {
-            bcrypt.hash(password, salt, (err, hash) => {
-                if (!err) {
-                    const newUser = new User({
-                        userName: username,
-                        password: hash,
-                        list: []
-                    });
-                    newUser.save()
-                        .then(resolve(true));
-                } else {
-                    reject(false);
-                }
-            });
-        });
-    } else {
-        //account already exists
-        return false;
-    }
-
+function createUser(username, password, salt) {
+    return new Promise((resolve, reject)=>{
+        bcrypt.hash(password, salt, (err, hashedPassword)=>{
+            if (!err) {
+                const newUser = new User({
+                    userName: username,
+                    password: hashedPassword
+                })
+                newUser.save()
+                    .then((data)=>{
+                        resolve(data)
+                    })
+            }else{
+                resolve('')
+            }
+        })
+    })
 }
 
 module.exports = {

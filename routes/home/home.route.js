@@ -5,8 +5,6 @@ const { homeGetController, homePostController } = require(path.join(__dirname, '
 
 const homeRouter = express.Router();
 
-// TODO: replace data with cookie
-
 // Handles home page
 homeRouter.get('/', homeGetController);
 
