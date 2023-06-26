@@ -1,6 +1,5 @@
-const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const { response } = require('express');
+const mongoose = require('mongoose');
 
 
 // DB Connection

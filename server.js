@@ -4,11 +4,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 // Local imports
-const homeRouter = require(path.join(__dirname, 'routes', 'home.route'));
-const loginRouter = require(path.join(__dirname, 'routes', 'login.route'));
-const aboutRouter = require(path.join(__dirname, 'routes', 'about.route'));
-const registerRouter = require(path.join(__dirname, 'routes', 'register.route'));
-const removeNoteRouter = require(path.join(__dirname, 'routes', 'remove.route'));
+const homeRouter = require(path.join(__dirname, 'routes', 'home.route', 'home.route.js'));
+const loginRouter = require(path.join(__dirname, 'routes', 'login.route', 'login.route.js'));
+const aboutRouter = require(path.join(__dirname, 'routes', 'about.route', 'about.route.js'));
+const removeNoteRouter = require(path.join(__dirname, 'routes', 'remove.route', 'remove.route.js'));
+const registerRouter = require(path.join(__dirname, 'routes', 'register.route', 'register.route.js'));
 
 // TODO: added validators later to the post / route.
 
@@ -31,6 +31,8 @@ app.use('/about', aboutRouter);
 
 // Login page
 app.use('/login', loginRouter);
+
+app.use('/auth', authRouter);
 
 // Register page
 app.use('/register', registerRouter);
