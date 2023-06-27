@@ -7,6 +7,6 @@ const removeNoteRouter = Router();
 
 // TODO: replace userAccount with cookie data
 
-removeNoteRouter.post('/', removePostController);
+removeNoteRouter.post('/remove', removePostController);
 
 module.exports = removeNoteRouter;

@@ -25,7 +25,7 @@ const registerRouter = require(path.join(__dirname, 'routes', 'register', 'regis
 async function localVerifyCallback(username, password, done) {
     try {
         const response = await loginUser(username, password)
-        done(null, {userID: response})
+        done(null, {...response})
     } catch (error) {
         done(error, null)
     }
@@ -40,7 +40,7 @@ passport.use(new local(localVerifyCallback))
 const app = express();
 
 // security
-app.use(helmet());
+// app.use(helmet());// TODO: helmet clocks inline events fix!!
 
 app.use(bodyParser.urlencoded({extended: true}))
 
@@ -75,7 +75,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', homeRouter);
 
 // handles the removal of the notes from the todo-list
-app.use('/remove', removeNoteRouter);
+app.use('/', removeNoteRouter);
 
 // ABOUT PAGE    
 app.use('/about', aboutRouter);

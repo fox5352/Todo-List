@@ -38,36 +38,31 @@ const User = mongoose.model('users', todoSchema);
 // Gets all users notes and returns a list
 function getUserNotes(ID) {
     return new Promise((resolve, reject)=>{
-        User.findOne({id: ID})
+        User.findOne({id: `${ID}`})
             .then(response=>{
-                console.log(response);
                 resolve(response.list)
             }).catch(err=>{
-                reject()
+                reject(err)
             })
     })
 }
 
 // Pushes new note to the users list 
-async function pushNewNote(username, note) {
-    try {
-        const response = await User.updateOne({ userName: username }, { $push: { list: note } });
-        return response;
-    } catch (error) {
-        console.log(error);
-        return;
-    }
+function pushNewNote(ID, note) {
+    return new Promise((resolve, reject)=>{
+        User.updateOne({id: `${ID}`}, { $push: { list: note } })
+            .then(response=> resolve(response))
+            .catch(err=> reject(err))
+    })
 }
 
 // TODO: pull data from index not string in the remove route.
 // pull specified note from user
-async function removeUserNote(username, note) {
-    try {
-        const response = await User.updateOne({ userName: username }, { $pull: { list: note } });
-        return response;
-    } catch (error) {
-
-    }
+async function removeUserNote(ID, note) {
+    return new Promise((resolve, reject)=>{
+        User.updateOne({id: `${ID}`}, { $pull: { list: note } })
+            .then(response=> resolve(response))
+    })
 }
 
 // check to see is username and password matches
@@ -77,7 +72,7 @@ async function loginUser(username, password) {
             .then(response=>{
                 bcrypt.compare(password, response.password, (err, bool) => {
                     if (bool){
-                        resolve(response.id)
+                        resolve({ID: response.id, userName: response.userName})
                     }else{
                         reject(false)
                     }

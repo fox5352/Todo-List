@@ -8,18 +8,20 @@ async function homeGetController(req, res) {
     
     if (req.isAuthenticated() && req.user) { //user session validator
         //gets users notes
-        // data.notes = await getUserNotes(req.user)
-        res.render('todoList', { data: data });
+        try{
+            data.notes = await getUserNotes(req.user.ID)
+            res.render('todoList', { data: data });
+        }catch(error){
+            res.redirect('/')
+        }
     }else{
         res.redirect('/about')
     }
 }
 
 async function homePostController(req, res) {
-
     // pushes new note to users list
-    const response = await pushNewNote('default', req.body.newNote);  //TODO: needs users data
-
+    const response = await pushNewNote(req.user.ID, req.body.newNote);  
     res.redirect("/");
 }
 

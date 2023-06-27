@@ -4,6 +4,7 @@ const { createUser } = require(join(__dirname, '..', '..', 'model', 'user.model.
 
 
 async function registerGetController(req, res) {
+    req.Logout()
     const data = {navBtn: false}
     res.render('register', { data: data }); // TODO:replace with page model
 }
