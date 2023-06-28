@@ -323,6 +323,33 @@ header {
     background-image: -webkit-linear-gradient(90deg, var(--header-bg-color-one), var(--header-bg-color-two));
 }
 
+/* loginMethod page */
+.link{
+    padding: 0;
+    margin: 15px auto;
+
+    width: 80%;
+    height: 45px;
+}
+
+.link-btn {
+
+    padding: 0;
+    margin: 0;
+
+    width: 100%;
+    height: 100%;
+
+    font-size: 17px;
+    color: var(--fg-one);
+
+    border: 0;
+    border-radius: 8px;
+    background-image: linear-gradient(90deg, var(--header-bg-color-one), var(--header-bg-color-two));
+    background-image: -moz-linear-gradient(90deg, var(--header-bg-color-one), var(--header-bg-color-two));
+    background-image: -webkit-linear-gradient(90deg, var(--header-bg-color-one), var(--header-bg-color-two));
+}
+
 @media screen and (max-width: 830px){
     .about-content{
         width: 60%;

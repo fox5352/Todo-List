@@ -71,6 +71,27 @@ async function removeUserNote(ID, index, note) {
     })
 }
 
+function findOrCreate(username, password) {
+    return new Promise((resolve, reject)=>{
+        User.exists({userName: username})
+        .then(exists=>{
+            if (exists) {
+                loginUser(username, password)
+                    .then(response=> resolve(response))
+                    .catch(err=> console.log(err))
+            }else{
+                createUser(username, password)
+                    .then(data=>{
+                        loginUser(username, password)
+                            .then(response=> resolve(response))
+                    })
+                    .catch(err=> console.log(err))
+
+            }
+        })
+    })
+}
+
 // check to see is username and password matches
 async function loginUser(username, password) {
     return new Promise((resolve, reject)=>{
@@ -90,9 +111,9 @@ async function loginUser(username, password) {
 }
 
 // creates a new user
-function createUser(username, password, salt) {
+function createUser(username, password) {
     return new Promise((resolve, reject)=>{
-        bcrypt.hash(password, salt, (err, hashedPassword)=>{
+        bcrypt.hash(password, Number(process.env.SALT_ROUNDS), (err, hashedPassword)=>{
             if (!err) {
                 const newUser = new User({
                     userName: username,
@@ -102,8 +123,6 @@ function createUser(username, password, salt) {
                     .then((data)=>{
                         resolve(data)
                     })
-            }else{
-                resolve('')
             }
         })
     })
@@ -113,6 +132,7 @@ module.exports = {
     getUserNotes,
     pushNewNote,
     removeUserNote,
+    findOrCreate,
     loginUser,
     createUser,
 }

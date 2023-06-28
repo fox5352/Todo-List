@@ -13,18 +13,18 @@ const local = require('passport-local').Strategy;
 // TODO: add google oauth
 
 // Local imports
-const {loginUser} = require(join(__dirname, 'model', 'user.model.js'))
+const {findOrCreate} = require(join(__dirname, 'model', 'user.model.js'))
 // routes
 const homeRouter = require(path.join(__dirname, 'routes', 'home', 'home.route.js'));
 const loginRouter = require(path.join(__dirname, 'routes', 'login', 'login.route.js'));
 const aboutRouter = require(path.join(__dirname, 'routes', 'about', 'about.route.js'));
 const removeNoteRouter = require(path.join(__dirname, 'routes', 'remove', 'remove.route.js'));
-const registerRouter = require(path.join(__dirname, 'routes', 'register', 'register.route.js'));
+const loginMethodRouter = require(path.join(__dirname, 'routes', 'loginMethod', 'loginMethod.route.js'));
 
 // Local strategy
 async function localVerifyCallback(username, password, done) {
     try {
-        const response = await loginUser(username, password)
+        const response = await findOrCreate(username, password)
         done(null, {...response})
     } catch (error) {
         done(error, null)
@@ -32,8 +32,6 @@ async function localVerifyCallback(username, password, done) {
 }
 passport.use(new local(localVerifyCallback))
 
-
-// TODO: added validators later to the post / route.
 // TODO: install morgan
 
 // Express config
@@ -84,10 +82,11 @@ app.use('/about', aboutRouter);
 // Login page
 app.use('/login', loginRouter);
 
+app.use('/loginMethod', loginMethodRouter)
 // app.use('/auth',);
 
 // Register page
-app.use('/register', registerRouter);
+// app.use('/register', registerRouter);
 
 
 https.createServer({

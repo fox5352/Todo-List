@@ -1,29 +1,29 @@
+const passport = require('passport');
 const { join } = require('path');
 // local imports
-const { createUser } = require(join(__dirname, '..', '..', 'model', 'user.model.js'));
+const { findOrCreate } = require(join(__dirname, '..', '..', 'model', 'user.model.js'));
 
 
 async function registerGetController(req, res) {
-    req.Logout()
     const data = {navBtn: false}
-    res.render('register', { data: data }); // TODO:replace with page model
+    res.render('register', { data: data });
 }
 
 async function registerPostController(req, res) {
     // TODO: add authentication
+    req.isAuthenticated() && req.Logout((dat)=>{})
 
     // check if passwords match
     if (req.body.password1 === req.body.password2) {
-        try {
-            const response = await createUser(req.body.userName, req.body.password1, Number(process.env.SALT_ROUNDS)); 
-            // console.log(response.id);
-            res.redirect('/')// TODO: added authentication here
-        } catch (error) {
-            console.log(error);
-        }
+        passport.authenticate('local',{
+            successRedirect:'/',
+            failureRedirect:'/register'
+        },(req,res))
     } else {
         res.redirect('/register');
     }
+    
+
 }
 
 module.exports = {
