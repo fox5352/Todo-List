@@ -323,7 +323,17 @@ header {
     background-image: -webkit-linear-gradient(90deg, var(--header-bg-color-one), var(--header-bg-color-two));
 }
 
+@media screen and (max-width: 830px){
+    .about-content{
+        width: 60%;
+    }
+}
+
 @media screen and (max-width: 512px) {
+
+    .about-content  {
+        width: 80%;
+    }
 
     .nav-btn {
         margin: 0px 2px;

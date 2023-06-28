@@ -16,6 +16,6 @@ loginRouter.post('/',
         failureRedirect: '/login',
         session: true,        
     })
-); //TODO: use passport localStrategy)
+);
 
 module.exports = loginRouter;

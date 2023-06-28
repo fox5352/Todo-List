@@ -4,15 +4,10 @@ const { removeUserNote, getUserNotes } = require(join(__dirname, '..', '..', 'mo
 
 
 async function removePostController(req, res) {
-    // gets the users data
-    const list = await getUserNotes(req.user.ID);
-
-    // this is just temporary till i can find a way to remove from index rather than the string its self
-    const delItem = list[req.body.index];
+    const notes = await getUserNotes(req.user.ID)
 
     // pull the data from the data base 
-    const response = await removeUserNote(req.user.ID, delItem);
-
+    const response = await removeUserNote(req.user.ID, notes[req.body.index].index, notes[req.body.index].note);
     // then reloads the page
     res.redirect('/');
 }

@@ -1,15 +1,15 @@
-const bcrypt = require('bcrypt');
-const { reject } = require('bcrypt/promises');
-const { response } = require('express');
-const mongoose = require('mongoose');
+const bcrypt = require('bcrypt')
+const { reject } = require('bcrypt/promises')
+const { response } = require('express')
+const mongoose = require('mongoose')
 
 
 // DB Connection
-mongoose.connect(`${process.env.DB_URL}/TodoListDB`, { useNewUrlParser: true });
+mongoose.connect(`${process.env.DB_URL}/TodoListDB`, { useNewUrlParser: true })
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error'));
-db.once('open', () => console.log('TodoListDB connected'));
+const db = mongoose.connection
+db.on('error', console.error.bind(console, 'connection error'))
+db.once('open', () => console.log('TodoListDB connected'))
 
 // creates user schema
 const todoSchema = mongoose.Schema({
@@ -30,10 +30,10 @@ const todoSchema = mongoose.Schema({
         type: Array,
         default: []
     }
-});
+})
 
 // creates user model
-const User = mongoose.model('users', todoSchema);
+const User = mongoose.model('users', todoSchema)
 
 // Gets all users notes and returns a list
 function getUserNotes(ID) {
@@ -50,17 +50,23 @@ function getUserNotes(ID) {
 // Pushes new note to the users list 
 function pushNewNote(ID, note) {
     return new Promise((resolve, reject)=>{
-        User.updateOne({id: `${ID}`}, { $push: { list: note } })
-            .then(response=> resolve(response))
-            .catch(err=> reject(err))
+        getUserNotes(ID)
+            .then(notes=>{
+                let index = 0
+                notes.length > 0 ? index = notes[notes.length - 1].index + 1 : index = notes.length
+                User.updateOne({id: `${ID}`}, { $push: { list: {index: index, note: note} } })
+                    .then(response=> resolve(response))
+                    .catch(err=> reject(err))
+            })        
     })
 }
 
-// TODO: pull data from index not string in the remove route.
 // pull specified note from user
-async function removeUserNote(ID, note) {
+async function removeUserNote(ID, index, note) {
     return new Promise((resolve, reject)=>{
-        User.updateOne({id: `${ID}`}, { $pull: { list: note } })
+        User.updateOne(
+            {id: `${ID}`}, 
+            { $pull: { list: {index: Number(index) ,note: String(note)}} })
             .then(response=> resolve(response))
     })
 }
@@ -109,4 +115,4 @@ module.exports = {
     removeUserNote,
     loginUser,
     createUser,
-};
+}
