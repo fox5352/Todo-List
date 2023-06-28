@@ -8,6 +8,7 @@ const express = require('express');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const local = require('passport-local').Strategy;
 // TODO: add github oauth
 // TODO: add google oauth
@@ -47,7 +48,14 @@ app.use(session({
     secret: 'cat bomb',
     resave: true,
     saveUninitialized: false,
+    store: MongoStore.create({
+        mongoUrl: process.env.DB_URL,
+        dbName: 'TodoListDB',
+        collectionName: 'sessions',
+        touchAfter: 3600// time period  in seconds
+    }),
     cookie: {
+        maxAge: 24 * 60 *60 * 1000,
         httpOnly: true,
         secure: true,
         signed: true,
