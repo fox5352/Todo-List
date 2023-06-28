@@ -1,3 +1,4 @@
+const {cpus} = require('os');
 const fs = require('fs');
 require('dotenv').config();
 const path = require('path');
@@ -5,6 +6,7 @@ const https = require('https');
 const helmet = require('helmet');
 const { join } = require('path');
 const express = require('express');
+const cluster = require('cluster');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const session = require('express-session');
@@ -120,10 +122,17 @@ app.use('/loginMethod', loginMethodRouter)
 // Register page
 // app.use('/register', registerRouter);
 
-
-https.createServer({
-    key: fs.readFileSync(join(__dirname, 'key.pem')),
-    cert: fs.readFileSync(join(__dirname, 'cert.pem'))
-},app).listen(process.env.PORT, () => {
+if (cluster.isPrimary) {
+    //starting servers
+    for (let index = 0; index < cpus().length; index++) {
+        cluster.fork()
+    }
     console.log(`server started on port ${process.env.PORT}`);
-})
+}else{
+    https.createServer({
+        key: fs.readFileSync(join(__dirname, 'key.pem')),
+        cert: fs.readFileSync(join(__dirname, 'cert.pem'))
+    },app).listen(process.env.PORT, () => {})
+}
+
+// TODO: create docker image

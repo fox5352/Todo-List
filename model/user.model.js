@@ -9,7 +9,6 @@ mongoose.connect(`${process.env.DB_URL}/TodoListDB`, { useNewUrlParser: true })
 
 const db = mongoose.connection
 db.on('error', console.error.bind(console, 'connection error'))
-db.once('open', () => console.log('TodoListDB connected'))
 
 // creates user schema
 const todoSchema = mongoose.Schema({
