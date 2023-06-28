@@ -5,8 +5,6 @@ const { removePostController } = require(join(__dirname, 'remove.controller.js')
 
 const removeNoteRouter = Router();
 
-// TODO: replace userAccount with cookie data
-
 removeNoteRouter.post('/remove', removePostController);
 
 module.exports = removeNoteRouter;

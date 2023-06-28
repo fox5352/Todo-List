@@ -21,7 +21,7 @@ async function homeGetController(req, res) {
 
 async function homePostController(req, res) {
     if (req.isAuthenticated() && req.user.ID){// pushes new note to users list
-        const response = await pushNewNote(req.user.ID, req.body.newNote);  
+        const response = await pushNewNote(req.user.ID, req.body.newNote.slice(0, 401));  
         res.redirect("/");
     }
 }

@@ -10,10 +10,9 @@ async function removePostController(req, res) {
         // pull the data from the data base 
         const response = await removeUserNote(req.user.ID, notes[req.body.index].index, notes[req.body.index].note);
         // then reloads the page
-        res.redirect('/');
-    }else {
-        res.redirect('/login');
+        return res.redirect('/');
     }
+    res.redirect('/login');
 }
 
 module.exports = {
