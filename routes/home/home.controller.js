@@ -20,9 +20,10 @@ async function homeGetController(req, res) {
 }
 
 async function homePostController(req, res) {
-    // pushes new note to users list
-    const response = await pushNewNote(req.user.ID, req.body.newNote);  
-    res.redirect("/");
+    if (req.isAuthenticated() && req.user.ID){// pushes new note to users list
+        const response = await pushNewNote(req.user.ID, req.body.newNote);  
+        res.redirect("/");
+    }
 }
 
 module.exports = {
