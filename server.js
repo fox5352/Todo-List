@@ -10,12 +10,12 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const local = require('passport-local').Strategy;
-// TODO: add github oauth
-// TODO: add google oauth
 
 // Local imports
 const {findOrCreate} = require(join(__dirname, 'model', 'user.model.js'))
+
 // routes
+const authRouter = require(path.join(__dirname, 'routes', 'auth', 'auth.route.js'));
 const homeRouter = require(path.join(__dirname, 'routes', 'home', 'home.route.js'));
 const loginRouter = require(path.join(__dirname, 'routes', 'login', 'login.route.js'));
 const aboutRouter = require(path.join(__dirname, 'routes', 'about', 'about.route.js'));
@@ -32,6 +32,29 @@ async function localVerifyCallback(username, password, done) {
     }
 }
 passport.use(new local(localVerifyCallback))
+// github strategy
+const GitHub_opts = {
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    callbackURL: '/auth/github/callback',
+};
+async function gitHubVerifyCallback(accessToken, refreshToken,profile, done){
+    console.log(profile);
+    done(null, profile)
+}
+// passport.use(new)// TODO: add github strategy
+
+const Google_opts = {
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: '/auth/github/callback',
+};
+async function googleVerifyCallback(accessToken, refreshToken, profile, done) {
+    console.log(profile);
+    done(null,profile)
+}
+// passport.use(new)// TODO: add google strategy
+
 
 // TODO: install morgan
 
@@ -91,6 +114,7 @@ app.use('/about', aboutRouter);
 app.use('/login', loginRouter);
 
 app.use('/loginMethod', loginMethodRouter)
+
 // app.use('/auth',);
 
 // Register page

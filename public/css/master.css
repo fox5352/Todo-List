@@ -125,8 +125,7 @@ header {
 .notes p {
     display: flex;
     align-items: center;
-    /* TODO: add some padding */
-    padding: 1px 3px;
+    padding: 2px 2px 2px 5px;
 
 }
 
@@ -134,7 +133,6 @@ header {
     display: flex;
 
     padding: 0;
-    /* TODO: style this border */
 }
 
 .note-pad-control>.form-input {
@@ -224,6 +222,26 @@ header {
     color: var(--header-bg-color-two);
 }
 
+.ul-text{
+    margin: 0;
+    margin-bottom: 20px;
+    padding: 8px 8px;
+
+    font-size: 18px;
+    font-family: serif;
+    text-align: left;
+    /* list-style; */
+
+    border: 0;
+    border-radius: 8px;
+    box-shadow: -3px -3px var(--header-bg-color-one), 3px 3px var(--header-bg-color-two), 3px -3px var(--header-bg-color-one), -3px 3px var(--header-bg-color-two);
+    background-color: var(--fg-one);
+}
+.list-item{
+    margin-left: 17px;
+    line-height: 1.3;
+    letter-spacing: 2px;
+}
 
 /* LOGIN and REGISTER PAGEs  */
 .login-body {
