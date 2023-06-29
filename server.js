@@ -3,6 +3,7 @@ require('dotenv').config();
 const path = require('path');
 const {cpus} = require('os');
 const https = require('https');
+const morgan = require('morgan');
 const helmet = require('helmet');
 const { join } = require('path');
 const express = require('express');
@@ -70,15 +71,15 @@ async function googleVerifyCallback(accessToken, refreshToken, profile, done) {
 passport.use(new googleStrategy(Google_opts, googleVerifyCallback))
 
 
-
-
-// TODO: install morgan
-
 // Express config
 const app = express();
 
 // security
-// app.use(helmet());// TODO: helmet clocks inline events fix!!
+app.use(helmet({
+    contentSecurityPolicy: false
+}));
+
+app.use(morgan('common'))// TODO: swap for pm2 later
 
 app.use(bodyParser.urlencoded({extended: true}))
 
