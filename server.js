@@ -1,7 +1,7 @@
-const {cpus} = require('os');
 const fs = require('fs');
 require('dotenv').config();
 const path = require('path');
+const {cpus} = require('os');
 const https = require('https');
 const helmet = require('helmet');
 const { join } = require('path');
@@ -12,6 +12,8 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const local = require('passport-local').Strategy;
+const gitHubStrategy = require('passport-github2').Strategy;
+const googleStrategy = require('passport-google-oauth20').Strategy;
 
 // Local imports
 const {findOrCreate} = require(join(__dirname, 'model', 'user.model.js'))
@@ -38,24 +40,36 @@ passport.use(new local(localVerifyCallback))
 const GitHub_opts = {
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: '/auth/github/callback',
+    callbackURL: 'https://localhost:3000/auth/github/callback',
 };
 async function gitHubVerifyCallback(accessToken, refreshToken,profile, done){
-    console.log(profile);
-    done(null, profile)
+    try {
+        const response = await findOrCreate(profile.username, '', profile.id)
+        done(null, {...response})
+    } catch (error) {
+        done(error, null)
+    }
 }
-// passport.use(new)// TODO: add github strategy
+passport.use(new gitHubStrategy(GitHub_opts, gitHubVerifyCallback))
 
 const Google_opts = {
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: '/auth/github/callback',
+    callbackURL: 'https://localhost:3000/auth/google/callback',
 };
 async function googleVerifyCallback(accessToken, refreshToken, profile, done) {
-    console.log(profile);
-    done(null,profile)
+    //id displayName emails photos provider
+
+    try {
+        const response = await findOrCreate(profile.displayName.split(' ')[0], '', profile.id)
+        done(null, {...response})
+    } catch (error) {
+        done(error, null)
+    }
 }
-// passport.use(new)// TODO: add google strategy
+passport.use(new googleStrategy(Google_opts, googleVerifyCallback))
+
+
 
 
 // TODO: install morgan
@@ -117,17 +131,16 @@ app.use('/login', loginRouter);
 
 app.use('/loginMethod', loginMethodRouter)
 
-// app.use('/auth',);
+app.use('/auth', authRouter);
 
-// Register page
-// app.use('/register', registerRouter);
 
 if (cluster.isPrimary) {
+    const cores = cpus().length
     //starting servers
-    for (let index = 0; index < cpus().length; index++) {
+    for (let index = 0; index < cores; index++) {
         cluster.fork()
+        index === cores - 1 && console.log(`server started on port ${process.env.PORT}\n${cores} workers started`);
     }
-    console.log(`server started on port ${process.env.PORT}`);
 }else{
     https.createServer({
         key: fs.readFileSync(join(__dirname, 'key.pem')),

@@ -5,27 +5,31 @@ const passport = require('passport');
 const authRouter = express.Router();
 
 // Google login route
-authRouter.get('/auth/google',
+authRouter.get('/google',
     passport.authenticate('google', {
-        scope: ['email']
+        scope: ['profile']
     })
 );
-authRouter.get('/auth/google/callback',
+authRouter.get('/google/callback',
     passport.authenticate('google', {
         failureRedirect: '/loginMethod',
         successRedirect: '/',
     }),(req, res) => {});
 
 // GitHub login route
-authRouter.get('/auth/github',
+authRouter.get('/github',
     passport.authenticate('github', {
-        scope: ["email"]
-    })
+    }),
+    (req, res)=>{
+        console.log('test');
+    }
 );
-authRouter.get('/auth/github/callback',
+authRouter.get('/github/callback',
     passport.authenticate('github', {
         failureRedirect: '/loginMethod',
         successRedirect: '/',
-    }),(req, res) => {});
+    }),(req, res) => {
+        console.log('test');
+    });
 
 module.exports = authRouter

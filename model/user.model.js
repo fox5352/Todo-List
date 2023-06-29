@@ -23,7 +23,6 @@ const todoSchema = mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
     },
     list: {
         type: Array,
@@ -70,18 +69,18 @@ async function removeUserNote(ID, index, note) {
     })
 }
 
-function findOrCreate(username, password) {
+function findOrCreate(username, password, id) {
     return new Promise((resolve, reject)=>{
         User.exists({userName: username})
         .then(exists=>{
             if (exists) {
-                loginUser(username, password)
+                loginUser(username, password, id)
                     .then(response=> resolve(response))
                     .catch(err=> console.log(err))
             }else{
-                createUser(username, password)
+                createUser(username, password, id)
                     .then(data=>{
-                        loginUser(username, password)
+                        loginUser(username, password, id)
                             .then(response=> resolve(response))
                     })
                     .catch(err=> console.log(err))
@@ -92,17 +91,25 @@ function findOrCreate(username, password) {
 }
 
 // check to see is username and password matches
-async function loginUser(username, password) {
+async function loginUser(username, password, id) {
     return new Promise((resolve, reject)=>{
         User.findOne({userName: username})
             .then(response=>{
-                bcrypt.compare(password, response.password, (err, bool) => {
-                    if (bool){
-                        resolve({ID: response.id, userName: response.userName})
+                if (!id) {
+                    bcrypt.compare(password, response.password, (err, bool) => {
+                        if (bool){
+                            resolve({ID: response.id, userName: response.userName})
+                        }else{
+                            reject(false)
+                        }
+                    })
+                }else{
+                    if (response.id == id) {
+                        resolve({ID: id, userName:username})
                     }else{
                         reject(false)
                     }
-                })
+                }
             }).catch(err=>{
                 reject(false)
             })
@@ -110,20 +117,31 @@ async function loginUser(username, password) {
 }
 
 // creates a new user
-function createUser(username, password) {
+function createUser(username, password, id) {
     return new Promise((resolve, reject)=>{
-        bcrypt.hash(password, Number(process.env.SALT_ROUNDS), (err, hashedPassword)=>{
-            if (!err) {
-                const newUser = new User({
-                    userName: username,
-                    password: hashedPassword
-                })
-                newUser.save()
-                    .then((data)=>{
-                        resolve(data)
+        if (!id) {
+            bcrypt.hash(password, Number(process.env.SALT_ROUNDS), (err, hashedPassword)=>{
+                if (!err) {
+                    const newUser = new User({
+                        userName: username,
+                        password: hashedPassword
                     })
-            }
-        })
+                    newUser.save()
+                        .then((data)=>{
+                            resolve(data)
+                        })
+                }
+            })
+        }else{
+            const newUser = new User({
+                userName: username,
+                id: id
+            })
+            newUser.save()
+                .then((data)=>{
+                    resolve(data)
+                })
+        }
     })
 }
 
