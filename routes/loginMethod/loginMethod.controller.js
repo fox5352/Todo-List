@@ -1,6 +1,5 @@
 const express = require('express');
 
-
 function LoginMethodGetController(req,res){
     const data = { navBtn: false }
 
