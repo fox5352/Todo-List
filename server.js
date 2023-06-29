@@ -1,13 +1,11 @@
 const fs = require('fs');
 require('dotenv').config();
 const path = require('path');
-const {cpus} = require('os');
 const https = require('https');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const { join } = require('path');
 const express = require('express');
-const cluster = require('cluster');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const session = require('express-session');
@@ -79,7 +77,7 @@ app.use(helmet({
     contentSecurityPolicy: false
 }));
 
-app.use(morgan('common'))// TODO: swap for pm2 later
+app.use(morgan('combined'))
 
 app.use(bodyParser.urlencoded({extended: true}))
 
@@ -135,18 +133,9 @@ app.use('/loginMethod', loginMethodRouter)
 app.use('/auth', authRouter);
 
 
-if (cluster.isPrimary) {
-    const cores = cpus().length
-    //starting servers
-    for (let index = 0; index < cores; index++) {
-        cluster.fork()
-        index === cores - 1 && console.log(`server started on port ${process.env.PORT}\n${cores} workers started`);
-    }
-}else{
-    https.createServer({
-        key: fs.readFileSync(join(__dirname, 'key.pem')),
-        cert: fs.readFileSync(join(__dirname, 'cert.pem'))
-    },app).listen(process.env.PORT, () => {})
-}
+https.createServer({
+    key: fs.readFileSync(join(__dirname, 'key.pem')),
+    cert: fs.readFileSync(join(__dirname, 'cert.pem'))
+},app).listen(process.env.PORT, () => {})
 
 // TODO: create docker image

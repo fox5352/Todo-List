@@ -4,6 +4,6 @@
 
 .env
 
-*.pem
 cert.pem
 key.pem 
+logs.txt
