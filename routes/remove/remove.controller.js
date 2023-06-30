@@ -1,7 +1,7 @@
 const { join } = require('path');
 const express = require('express');
 // local imports 
-const { removeUserNote, getUserNotes } = require(join(__dirname, '..', '..', 'model', 'user.model.js'));
+const { removeUserNote, getUserNotes } = require(join(__dirname, '..', '..', 'model', 'user.model', 'user.model.js'));
 
 
 async function removePostController(req, res) {

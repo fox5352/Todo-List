@@ -1,6 +1,5 @@
 const fs = require('fs');
 require('dotenv').config();
-const path = require('path');
 const https = require('https');
 const morgan = require('morgan');
 const helmet = require('helmet');
@@ -15,15 +14,15 @@ const gitHubStrategy = require('passport-github2').Strategy;
 const googleStrategy = require('passport-google-oauth20').Strategy;
 
 // Local imports
-const {findOrCreate} = require(join(__dirname, 'model', 'user.model.js'))
+const {findOrCreate} = require(join(__dirname, 'model', 'user.model', 'user.model.js'))
 
 // routes
-const authRouter = require(path.join(__dirname, 'routes', 'auth', 'auth.route.js'));
-const homeRouter = require(path.join(__dirname, 'routes', 'home', 'home.route.js'));
-const loginRouter = require(path.join(__dirname, 'routes', 'login', 'login.route.js'));
-const aboutRouter = require(path.join(__dirname, 'routes', 'about', 'about.route.js'));
-const removeNoteRouter = require(path.join(__dirname, 'routes', 'remove', 'remove.route.js'));
-const loginMethodRouter = require(path.join(__dirname, 'routes', 'loginMethod', 'loginMethod.route.js'));
+const authRouter = require(join(__dirname, 'routes', 'auth', 'auth.route.js'));
+const homeRouter = require(join(__dirname, 'routes', 'home', 'home.route.js'));
+const loginRouter = require(join(__dirname, 'routes', 'login', 'login.route.js'));
+const aboutRouter = require(join(__dirname, 'routes', 'about', 'about.route.js'));
+const removeNoteRouter = require(join(__dirname, 'routes', 'remove', 'remove.route.js'));
+const loginMethodRouter = require(join(__dirname, 'routes', 'loginMethod', 'loginMethod.route.js'));
 
 // Local strategy
 async function localVerifyCallback(username, password, done) {
@@ -41,7 +40,7 @@ const GitHub_opts = {
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
     callbackURL: 'https://localhost:3000/auth/github/callback',
 };
-async function gitHubVerifyCallback(accessToken, refreshToken,profile, done){
+async function gitHubVerifyCallback(accessToken, refreshToken,profile, done){//TODO: get email and pass it in
     try {
         const response = await findOrCreate(profile.username, '', profile.id)
         done(null, {...response})
@@ -56,7 +55,7 @@ const Google_opts = {
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: 'https://localhost:3000/auth/google/callback',
 };
-async function googleVerifyCallback(accessToken, refreshToken, profile, done) {
+async function googleVerifyCallback(accessToken, refreshToken, profile, done) {//TODO: get email and pass it in
     //id displayName emails photos provider
 
     try {
@@ -113,7 +112,7 @@ app.use(passport.session())
 
 
 app.set('view engine', 'ejs');
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(join(__dirname, 'public')));
 
 
 // HOME PAGE    
@@ -125,13 +124,16 @@ app.use('/', removeNoteRouter);
 // ABOUT PAGE    
 app.use('/about', aboutRouter);
 
+// login method page
+app.use('/loginMethod', loginMethodRouter)
+
+// oauth redirects
+app.use('/auth', authRouter);
+
 // Login page
 app.use('/login', loginRouter);
 
-app.use('/loginMethod', loginMethodRouter)
-
-app.use('/auth', authRouter);
-
+//TODO: added register route
 
 https.createServer({
     key: fs.readFileSync(join(__dirname, 'key.pem')),

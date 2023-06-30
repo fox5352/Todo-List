@@ -1,37 +1,14 @@
 const bcrypt = require('bcrypt')
-const { reject } = require('bcrypt/promises')
-const { response } = require('express')
+const { join} = require('path');
 const mongoose = require('mongoose')
-
+//local imports
+const User = require(join(__dirname, 'user.schema.js'))
 
 // DB Connection
-mongoose.connect(`${process.env.DB_URL}/TodoListDB`, { useNewUrlParser: true })
-
-const db = mongoose.connection
-db.on('error', console.error.bind(console, 'connection error'))
-
-// creates user schema
-const todoSchema = mongoose.Schema({
-    id: {
-        type: String,
-        unique: true,
-        default: new mongoose.Types.ObjectId()
-    },
-    userName: {
-        type: String,
-        required: true
-    },
-    password: {
-        type: String,
-    },
-    list: {
-        type: Array,
-        default: []
-    }
+mongoose.connect(`${process.env.DB_URL}/TodoListDB`, { 
+    useNewUrlParser: true, 
 })
-
-// creates user model
-const User = mongoose.model('users', todoSchema)
+mongoose.connection.on('error', (err)=>console.error(err))
 
 // Gets all users notes and returns a list
 function getUserNotes(ID) {
@@ -59,7 +36,7 @@ function pushNewNote(ID, note) {
     })
 }
 
-// pull specified note from user
+// pull specified note from user using user ID, index number and note
 async function removeUserNote(ID, index, note) {
     return new Promise((resolve, reject)=>{
         User.updateOne(
@@ -69,6 +46,7 @@ async function removeUserNote(ID, index, note) {
     })
 }
 
+// checks to see if account exists, if true it calls loginUser otherwise it calls createUser and passes the data
 function findOrCreate(username, password, id) {
     return new Promise((resolve, reject)=>{
         User.exists({userName: username})
@@ -90,8 +68,9 @@ function findOrCreate(username, password, id) {
     })
 }
 
-// check to see is username and password matches
-async function loginUser(username, password, id) {
+// if theres no id passed checks to see is username and password matches
+// if theres a id then checks to see if users id matches
+async function loginUser(username, password, id) {//TODO: change to find many later
     return new Promise((resolve, reject)=>{
         User.findOne({userName: username})
             .then(response=>{
@@ -116,8 +95,9 @@ async function loginUser(username, password, id) {
     })
 }
 
-// creates a new user
-function createUser(username, password, id) {
+// if there no id then its a local registering and uses password
+// if theres a id then is creates user with no password
+function createUser(username, password, id) {//TODO: add email param later
     return new Promise((resolve, reject)=>{
         if (!id) {
             bcrypt.hash(password, Number(process.env.SALT_ROUNDS), (err, hashedPassword)=>{

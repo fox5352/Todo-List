@@ -1,6 +1,6 @@
 const path = require('path');
 // local imports
-const { getUserNotes, pushNewNote } = require(path.join(__dirname, '..', '..', 'model', 'user.model.js'));
+const { getUserNotes, pushNewNote } = require(path.join(__dirname, '..', '..', 'model', 'user.model', 'user.model.js'));
 
 async function homeGetController(req, res) {
     let data = {notes: [], navBtn: false}
