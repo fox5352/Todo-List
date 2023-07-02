@@ -6,4 +6,9 @@
 
 cert.pem
 key.pem 
+DB.pem
 logs.txt
+
+
+Dockerfile
+.dockerignore

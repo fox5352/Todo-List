@@ -75,6 +75,16 @@ header {
     background-color: #8f0e12;
 }
 
+.btn-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0;
+
+    fill: var(--fg-one);
+}
+
 /* HOME TODO list page */
 
 .container {
@@ -328,7 +338,7 @@ header {
     color: var(--header-bg-color-two);
 }
 
-.form-btn {
+.form-btn { 
     margin: 0 auto;
 
     width: 45%;
@@ -355,10 +365,11 @@ header {
     height: 45px;
 }
 .icon{
+    display: flex;
+    align-items: center;
     fill: var(--fg-one);
     position: relative;
     left: 11px;
-    top: 2px;
 }
 
 .link-btn {

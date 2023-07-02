@@ -83,13 +83,12 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(session({
     name: 'session',
     secret: 'cat bomb',
-    resave: true,
+    resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
-        mongoUrl: process.env.DB_URL,
+        mongoUrl: process.env.DB_URL_O,
         dbName: 'TodoListDB',
-        collectionName: 'sessions',
-        touchAfter: 3600// time period  in seconds
+        collectionName: "session"
     }),
     cookie: {
         maxAge: 24 * 60 *60 * 1000,
@@ -131,9 +130,7 @@ app.use('/loginMethod', loginMethodRouter)
 app.use('/auth', authRouter);
 
 // Login page
-app.use('/login', loginRouter);
-
-//TODO: added register route
+app.use('/login', loginRouter); //TODO: switch to crypto
 
 https.createServer({
     key: fs.readFileSync(join(__dirname, 'key.pem')),

@@ -1,14 +1,18 @@
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const { join} = require('path');
 const mongoose = require('mongoose')
 //local imports
 const User = require(join(__dirname, 'user.schema.js'))
 
 // DB Connection
-mongoose.connect(`${process.env.DB_URL}/TodoListDB`, { 
-    useNewUrlParser: true, 
-})
-mongoose.connection.on('error', (err)=>console.error(err))
+mongoose.connect(
+    `${process.env.DB_URL_O}/TodoListDB`, { 
+   useNewUrlParser: true, 
+    useUnifiedTopology: true 
+}
+)
+mongoose.connection.once('open', ()=>{console.log('connected');})
+mongoose.connection.once('error', (err)=>console.error(err))
 
 // Gets all users notes and returns a list
 function getUserNotes(ID) {
