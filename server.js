@@ -4,6 +4,8 @@ const https = require('https');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const { join } = require('path');
+const { cpus } = require('os');   
+const cluster = require('cluster');
 const express = require('express');
 const passport = require('passport');
 const bodyParser = require('body-parser');
@@ -132,9 +134,22 @@ app.use('/auth', authRouter);
 // Login page
 app.use('/login', loginRouter); //TODO: switch to crypto
 
-https.createServer({
-    key: fs.readFileSync(join(__dirname, 'key.pem')),
-    cert: fs.readFileSync(join(__dirname, 'cert.pem'))
-},app).listen(process.env.PORT, () => {})
 
-// TODO: create docker image
+if (cluster.isPrimary) {
+    console.log('server starting now...');
+
+    const cores = cpus().length
+
+    for (let core = 0; core < cores; core++) {
+        cluster.fork()
+    }
+
+    cluster.on('exit', (worker, code, signal) => {
+        console.log(`worker ${worker.process.pid} died`);
+      });
+}else{
+    https.createServer({
+        key: fs.readFileSync(join(__dirname, 'key.pem')),
+        cert: fs.readFileSync(join(__dirname, 'cert.pem'))
+    },app).listen(process.env.PORT, () => {})
+}

@@ -24,7 +24,7 @@
     "pm2": "^5.3.0"
   },
   "scripts": {
-    "start": "pm2 start server.js -i max -l logs.txt && pm2 monit",
+    "start": "node server.js",
     "dev": "nodemon server.js",
     "stop": "pm2 stop server.js && pm2 delete server.js ",
     "reboot": "pm2 reload server.js",
