@@ -17,8 +17,6 @@ body {
     /* background-color: var(--fg-one); */
 }
 
-
-
 /* HEADER */
 header {
     display: flex;
@@ -401,6 +399,9 @@ header {
 }
 
 @media screen and (max-width: 512px) {
+    header .heading {
+        display: none;
+    }
 
     .about-content  {
         width: 80%;
@@ -408,8 +409,6 @@ header {
 
     .nav-btn {
         margin: 0px 2px;
-
-        width: 41px;
     }
 
     .nav-btn:hover {

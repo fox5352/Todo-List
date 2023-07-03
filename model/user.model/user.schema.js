@@ -7,6 +7,12 @@ const todoSchema = mongoose.Schema({
         unique: true,
         default: new mongoose.Types.ObjectId()
     },
+    githubID: {
+        type: String
+    },
+    googleID: {
+        type: String
+    },
     userName: {
         type: String,
         required: true
