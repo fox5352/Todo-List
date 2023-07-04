@@ -40,7 +40,7 @@ passport.use(new local(localVerifyCallback))
 const GitHub_opts = {
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: 'https://localhost:3000/auth/github/callback',
+    callbackURL: 'https://52.207.238.161:3000/auth/github/callback',
 };
 async function gitHubVerifyCallback(accessToken, refreshToken,profile, done){//TODO: get email and pass it in
     try {
@@ -55,7 +55,7 @@ passport.use(new gitHubStrategy(GitHub_opts, gitHubVerifyCallback))
 const Google_opts = {
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: 'https://localhost:3000/auth/google/callback',
+    callbackURL: 'https://52.207.238.161:3000/auth/google/callback',
 };
 async function googleVerifyCallback(accessToken, refreshToken, profile, done) {//TODO: get email and pass it in
     //id displayName emails photos provider

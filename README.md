@@ -1,4 +1,4 @@
-# Todo List website
+# [Todo List website](https://52.207.238.161:3000/)
 
 ----
 
@@ -71,6 +71,6 @@ used to manage secure and store session data allong with connect-mongo
 
 #### Theme
 
-The theme i used is a monochromatic palette I used it because i wanted a calm palette on this site
+The theme i used is a monochromatic palette. I used it because i wanted a calm palette on this site
 
 I thought of using a complementary harmony scheme but didn't find palette i like so i went with the monochromatic strawberry palette
