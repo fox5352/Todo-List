@@ -13,7 +13,6 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const local = require('passport-local').Strategy;
 const gitHubStrategy = require('passport-github2').Strategy;
-const googleStrategy = require('passport-google-oauth20').Strategy;
 
 // Local imports
 const {findOrCreate} = require(join(__dirname, 'model', 'user.model', 'user.model.js'))
@@ -52,23 +51,6 @@ async function gitHubVerifyCallback(accessToken, refreshToken,profile, done){//T
 }
 passport.use(new gitHubStrategy(GitHub_opts, gitHubVerifyCallback))
 
-const Google_opts = {
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: 'https://52.207.238.161:3000/auth/google/callback',
-};
-async function googleVerifyCallback(accessToken, refreshToken, profile, done) {//TODO: get email and pass it in
-    //id displayName emails photos provider
-
-    try {
-        const response = await findOrCreate(profile.displayName.split(' ')[0], '', profile.id)
-        done(null, {...response})
-    } catch (error) {
-        done(error, null)
-    }
-}
-passport.use(new googleStrategy(Google_opts, googleVerifyCallback))
-
 
 // Express config
 const app = express();
@@ -80,7 +62,6 @@ app.use(helmet({
 
 app.use(morgan('combined'))
 
-app.use(bodyParser.urlencoded({extended: true}))
 
 app.use(session({
     name: 'session',
@@ -106,6 +87,8 @@ passport.serializeUser((user, done)=>{
 passport.deserializeUser((obj, done)=>{
     done(null, obj)
 })
+
+app.use(express.urlencoded({extended: true}))
 
 // initialize passport and sessions
 app.use(passport.initialize())
