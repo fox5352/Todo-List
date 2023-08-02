@@ -39,7 +39,7 @@ passport.use(new local(localVerifyCallback))
 const GitHub_opts = {
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: 'https://52.207.238.161:3000/auth/github/callback',
+    callbackURL: 'https://52.201.225.92:3000/auth/github/callback',
 };
 async function gitHubVerifyCallback(accessToken, refreshToken,profile, done){//TODO: get email and pass it in
     try {
