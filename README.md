@@ -29,7 +29,7 @@ it uses some of the most popular frameworks such as express, mongoose, passport,
 
 ###### Nodejs:
 
-https used to create a ssl encryption and the cluster,os user to create multiple clusters 
+https used to create a ssl encryption
 
 ###### Express:
 
@@ -66,6 +66,10 @@ used to handel authentication and Google/GitHub login oauth flow
 ###### express-session:
 
 used to manage secure and store session data allong with connect-mongo
+
+###### pm2
+
+used to manage server when deployed
 
 ----
 

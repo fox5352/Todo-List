@@ -27,7 +27,7 @@
     "start": "pm2 start server.js -i -1",
     "dev": "nodemon server.js",
     "stop": "pm2 stop server.js && pm2 delete server.js ",
-    "reboot": "pm2 reload server.js",
+    "reboot": "pm2 reload all",
     "monit": "pm2 monit",
     "help": "pm2 --help"
   },
