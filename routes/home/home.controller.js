@@ -6,7 +6,7 @@ async function homeGetController(req, res) {
     let data = {notes: [], navBtn: false}
 
     
-    if (req.isAuthenticated() && req.user.ID) { //user session validator
+    if (req.isAuthenticated() && req.user.ID) { // user session validator
         //gets users notes
         try{
             data.notes = await getUserNotes(req.user.ID)
