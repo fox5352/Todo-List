@@ -19,7 +19,6 @@ it uses some of the most popular frameworks such as express, mongoose, passport,
 * passport
 * express-session
 * morgan
-* body-parser
 * bcryptjs
 * helmet
 
@@ -27,54 +26,37 @@ it uses some of the most popular frameworks such as express, mongoose, passport,
 
 #### what and How I used.
 
-###### Nodejs:
-
-https used to create a ssl encryption
-
 ###### Express:
-
 solid understanding of express router, middleware and M.V.C
 
 ###### Ejs:
-
 used to create the pages and render item's conditionally
 
 ###### Mongoose:
-
 used to create/validate schema's and connect to the database
 
 ###### Bcrypts:
-
 used to hash and salt users passwords
 
-###### Body-parser:
-
-used to manage users form data
-
 ###### Helmet:
-
 used to secure the server
 
 ###### Morgan;
-
 used to log all servers request and responses
 
 ###### Passportjs:
-
 used to handel authentication and Google/GitHub login oauth flow
 
 ###### express-session:
-
 used to manage secure and store session data allong with connect-mongo
 
-###### pm2
+-----
 
-used to manage server when deployed
-
-----
-
-#### Theme
-
-The theme i used is a monochromatic palette. I used it because i wanted a calm palette on this site
-
-I thought of using a complementary harmony scheme but didn't find palette i like so i went with the monochromatic strawberry palette
+## .env
+* DB_URL
+* DB_URL_O
+* SESSION_SECRET
+* GITHUB_CLIENT_ID
+* GITHUB_CLIENT_SECRET
+* SALT_ROUNDS
+* PORT

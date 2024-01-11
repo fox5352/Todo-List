@@ -24,7 +24,7 @@
     "pm2": "^5.3.0"
   },
   "scripts": { 
-    "start": "pm2 start server.js -i -1",
+    "start": "node server.js",
     "dev": "node server.js"
   },
   "name": "todo-list",

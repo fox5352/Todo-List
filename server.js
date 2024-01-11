@@ -40,11 +40,11 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
-    // store: MongoStore.create({
-    //     mongoUrl: process.env.DB_URL_O,
-    //     dbName: 'TodoListDB',
-    //     collectionName: "session"
-    // }),
+    store: MongoStore.create({
+        mongoUrl: process.env.DB_URL_O,
+        dbName: 'TodoListDB',
+        collectionName: "session"
+    }),
     // cookie: {
     //     maxAge: 24 * 60 *60 * 1000,
     //     httpOnly: true,
@@ -85,7 +85,6 @@ passport.use(new local(async (username, password, done) => {
 
 
 passport.serializeUser((user, done)=>{
-    console.log(user);
     done(null, user)
 })
 passport.deserializeUser((obj, done)=>{
@@ -94,12 +93,8 @@ passport.deserializeUser((obj, done)=>{
 })
 
 app.use(express.urlencoded({extended: true}))
-
-
-
 app.set('view engine', 'ejs');
 app.use(express.static(join(__dirname, 'public')));
-
 
 // HOME PAGE    
 app.use('/', homeRouter);
